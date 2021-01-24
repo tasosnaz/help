@@ -10,6 +10,8 @@ var ctx = canvas.getContext("2d");
 var hit = 0;
 var x = 500;
 var xdir = 1;
+var myReq;
+var myInterval;
 
 function trigger() {
     if (x == 1000 || x == 400) {
@@ -28,12 +30,16 @@ function trigger() {
     if (hit == 0) {
         requestAnimationFrame(drawCowboy);
     } else if (hit == 1) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         requestAnimationFrame(draw2Cowboy);
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "red";
+        ctx.fillText("this was a mistake", 150, 390);
     }
 
     
-
-    requestAnimationFrame(bullet);
+    
+    // requestAnimationFrame(bullet);
 
 }
 
@@ -133,14 +139,21 @@ function draw2Cowboy() {
 
 
 function bullet() {
-    ctx.clearRect(0, 0, 1000, 500);
+    ctx.clearRect(380, 300, 800, 800);
     ctx.beginPath();
     var draw = ctx.arc(x, 470, 3, 0, 2 * Math.PI);
     ctx.strokeStyle = "black";
     ctx.stroke();
     ctx.fillStyle = "black";
     ctx.fill();
+    if (ctx.isPointInPath(400, 470)) {
+        clearInterval(myInterval);
+        setTimeout(bullet,10);
+        hit=1;
+      };
 }
 
-requestAnimationFrame(bullet);
-setInterval(trigger, 20);
+
+myReq = requestAnimationFrame(bullet);
+myInterval = setInterval(bullet, 15);
+setInterval(trigger, 15);
